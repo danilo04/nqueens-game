@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">nqueens-game</string>
+    
+    <!-- Main Menu Screen -->
+    <string name="main_menu_title">N-Queens Puzzle</string>
+    <string name="main_menu_new_game">Start New Game</string>
+    <string name="main_menu_leaderboards">Leaderboards</string>
+    <string name="main_menu_exit">Exit</string>
+</resources>
