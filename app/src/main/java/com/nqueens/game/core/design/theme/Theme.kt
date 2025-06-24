@@ -1,4 +1,4 @@
-package com.nqueens.game.ui.theme
+package com.nqueens.game.core.design.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

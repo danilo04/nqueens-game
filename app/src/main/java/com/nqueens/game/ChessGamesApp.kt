@@ -1,10 +1,10 @@
-package com.nqueens.game.ui
+package com.nqueens.game
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.nqueens.game.ui.theme.ChessGamesTheme
+import com.nqueens.game.core.design.theme.ChessGamesTheme
 
 @Composable
 fun ChessGamesApp() {

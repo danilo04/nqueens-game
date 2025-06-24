@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nqueens.game.R
-import com.nqueens.game.ui.theme.ChessGamesTheme
+import com.nqueens.game.core.design.theme.ChessGamesTheme
 
 sealed interface MainMenuAction {
     data object StartNewGame : MainMenuAction

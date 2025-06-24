@@ -1,4 +1,4 @@
-package com.nqueens.game.ui
+package com.nqueens.game
 
 enum class Screens(val route: String) {
     MENU("menu"),

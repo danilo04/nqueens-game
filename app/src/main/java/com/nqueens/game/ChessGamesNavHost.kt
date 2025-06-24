@@ -1,4 +1,4 @@
-package com.nqueens.game.ui
+package com.nqueens.game
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
