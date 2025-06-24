@@ -4,6 +4,7 @@ enum class Screens(
     val route: String,
 ) {
     MENU("menu"),
-    BOARD_GAME("board_game"),
+    START_N_QUEENS_GAME("start_n_queens_game"),
+    N_QUEENS_GAME("n_queens_game"),
     LEADERBOARDS("leaderboards"),
 }

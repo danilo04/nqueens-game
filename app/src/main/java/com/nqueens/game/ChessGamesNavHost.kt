@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nqueens.game.features.mainmenu.ui.MainMenuScreen
+import com.nqueens.game.features.nqueens.ui.NQueensGameScreen
+import com.nqueens.game.features.nqueens.ui.StartNQueensGameScreen
 
 @Composable
 fun ChessGamesNavHost(
@@ -20,9 +22,22 @@ fun ChessGamesNavHost(
         startDestination = startDestination,
     ) {
         composable(Screens.MENU.route) {
-            MainMenuScreen { }
+            MainMenuScreen {
+                navController.navigate(Screens.START_N_QUEENS_GAME.route)
+            }
         }
-        composable(Screens.BOARD_GAME.route) {
+        composable(Screens.START_N_QUEENS_GAME.route) {
+            StartNQueensGameScreen(
+                onNavigateBack = { navController.navigate(Screens.MENU.route) },
+                onStartGame = { playerName, queensCount ->
+                    navController.navigate(Screens.N_QUEENS_GAME.route)
+                },
+            )
+        }
+        composable(Screens.N_QUEENS_GAME.route) {
+            NQueensGameScreen {
+                navController.popBackStack()
+            }
         }
         composable(Screens.LEADERBOARDS.route) {
         }
