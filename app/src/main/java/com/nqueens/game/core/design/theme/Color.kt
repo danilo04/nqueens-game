@@ -1,4 +1,4 @@
-package com.nqueens.game.ui.theme
+package com.nqueens.game.core.design.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -217,10 +217,3 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF1B211E)
 val surfaceContainerDarkHighContrast = Color(0xFF2B322F)
 val surfaceContainerHighDarkHighContrast = Color(0xFF363D3A)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF424845)
-
-
-
-
-
-
-

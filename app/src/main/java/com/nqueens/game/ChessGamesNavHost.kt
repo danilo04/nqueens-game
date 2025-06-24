@@ -1,4 +1,4 @@
-package com.nqueens.game.ui
+package com.nqueens.game
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.nqueens.game.features.mainmenu.ui.MainMenuScreen
 
 @Composable
-fun NQueensGameNavHost(
+fun ChessGamesNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = Screens.MENU.route,
@@ -17,16 +17,14 @@ fun NQueensGameNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
     ) {
         composable(Screens.MENU.route) {
-            MainMenuScreen {  }
+            MainMenuScreen { }
         }
         composable(Screens.BOARD_GAME.route) {
-
         }
         composable(Screens.LEADERBOARDS.route) {
-
         }
     }
 }
