@@ -46,7 +46,7 @@ class StartNQueensGameViewModel
             val currentState = _uiState.value
             val isPlayerNameValid = currentState.playerName.trim().isNotEmpty()
             val queensNumber = currentState.numberOfQueens.toIntOrNull()
-            val isQueensValid = queensNumber != null && queensNumber in 4..11
+            val isQueensValid = validateQueensNumber(queensNumber)
 
             _uiState.value =
                 currentState.copy(
@@ -60,7 +60,7 @@ class StartNQueensGameViewModel
             val queensNumber = currentState.numberOfQueens.toIntOrNull()
 
             val isPlayerNameValid = trimmedPlayerName.isNotEmpty()
-            val isQueensValid = queensNumber != null && queensNumber in 4..12
+            val isQueensValid = validateQueensNumber(queensNumber)
 
             _uiState.value =
                 currentState.copy(
@@ -68,12 +68,16 @@ class StartNQueensGameViewModel
                     numberOfQueensError = !isQueensValid,
                 )
 
-            return if (isPlayerNameValid && isQueensValid) {
-                Pair(trimmedPlayerName, queensNumber!!)
-            } else {
-                null
-            }
+            return (
+                if (isPlayerNameValid && isQueensValid) {
+                    Pair(trimmedPlayerName, queensNumber!!)
+                } else {
+                    null
+                }
+            )
         }
+
+        private fun validateQueensNumber(number: Int?): Boolean = number != null && number in 4..12
 
         companion object {
             const val MIN_QUEENS = 4
