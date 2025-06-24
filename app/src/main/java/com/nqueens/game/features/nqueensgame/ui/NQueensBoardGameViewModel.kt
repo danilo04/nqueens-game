@@ -42,14 +42,13 @@ class NQueensBoardGameViewModel @Inject constructor() : ViewModel() {
     init {
         startTimer()
         viewModelScope.launch {
-            nQueensBoardGame.queensInPlace
+            nQueensBoardGame.queensPlaced
                 .combine(nQueensBoardGame.gameState) { queensPlaced, gameState ->
-                    
                     _uiState.value = _uiState.value.copy(
                         isGameCompleted = gameState == GameState.SOLVED,
                         queensPlaced = queensPlaced
                     )
-                }
+                }.collect {}
         }
     }
     
@@ -89,20 +88,6 @@ class NQueensBoardGameViewModel @Inject constructor() : ViewModel() {
     private fun stopTimer() {
         timerJob?.cancel()
         timerJob = null
-    }
-    
-    private fun updateQueensCount() {
-        val queensCount = nQueensBoardGame.board.getPiecesOnBoard().size
-        _uiState.value = _uiState.value.copy(queensPlaced = queensCount)
-    }
-    
-    private fun checkGameCompletion() {
-        val currentState = _uiState.value
-        if (currentState.queensPlaced == currentState.totalQueens) {
-            // Here you could add logic to check if the solution is valid
-            _uiState.value = currentState.copy(isGameCompleted = true)
-            stopTimer()
-        }
     }
     
     override fun onCleared() {

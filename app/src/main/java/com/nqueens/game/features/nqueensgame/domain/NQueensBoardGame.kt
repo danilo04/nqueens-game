@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 class NQueensBoardGame(val n: Int) : BoardGame() {
     private var _gameState = MutableStateFlow(GameState.NOT_STARTED)
     val boardPositionsAttacked = mutableMapOf<BoardPosition, Set<BoardPosition>>()
-    private val _queensInPlace = MutableStateFlow(0)
-    val queensInPlace = _queensInPlace.asStateFlow()
+    private val _queensPlaced = MutableStateFlow(0)
+    val queensPlaced = _queensPlaced.asStateFlow()
 
     override val board: Board by lazy {
         ChessBoard(n)
@@ -49,14 +49,14 @@ class NQueensBoardGame(val n: Int) : BoardGame() {
             fromPosition = position,
         ).toSet()
 
-        _queensInPlace.value += 1
+        _queensPlaced.value += 1
 
         when {
             boardPositionsAttacked.containsBoardPosition(position) -> {
                 _gameState.value = GameState.BLOCKED
             }
 
-            _queensInPlace.value == n -> {
+            _queensPlaced.value == n -> {
                 _gameState.value = GameState.SOLVED
             }
         }
@@ -67,7 +67,7 @@ class NQueensBoardGame(val n: Int) : BoardGame() {
     override fun removePiece(position: BoardPosition) {
         board.setSpot(Spot.EmptySpot, position)
         boardPositionsAttacked.remove(position)
-        _queensInPlace.value = maxOf(0, _queensInPlace.value - 1)
+        _queensPlaced.value = maxOf(0, _queensPlaced.value - 1)
 
         // Recalculate error states
         if (_gameState.value == GameState.BLOCKED) {
@@ -88,7 +88,7 @@ class NQueensBoardGame(val n: Int) : BoardGame() {
         board.clear()
         _gameState.value = GameState.NOT_STARTED
         boardPositionsAttacked.clear()
-        _queensInPlace.value = 0
+        _queensPlaced.value = 0
     }
 }
 

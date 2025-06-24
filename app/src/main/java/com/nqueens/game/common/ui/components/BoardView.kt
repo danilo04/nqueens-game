@@ -53,8 +53,7 @@ fun BoardView(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center
         ) {
             val size = boardState.boardSize
@@ -91,11 +90,11 @@ fun RowScope.BoardCell(
     val lightColor = primaryColor.copy(alpha = 0.3f)
     val darkColor = primaryColor.copy(alpha = 0.8f)
 
-    val isLightSquare = (row + col) % 2 == 0
+    val isDarkSquare = (row + col) % 2 == 0
     val cellColor = when {
         cellState.hasErrorColor -> errorDark
-        isLightSquare -> lightColor
-        else -> darkColor
+        isDarkSquare -> darkColor
+        else -> lightColor
     }
 
     Box(

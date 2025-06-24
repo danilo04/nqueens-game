@@ -25,6 +25,7 @@ class NQueensBoardGameBoardState(
                     nQueensBoardGame.removePiece(position)
                     updateErrorStates()
                 } else {
+                    clearAllSelections()
                     selectCell(position, SelectedState.TO_DELETE)
                 }
             }

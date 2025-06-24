@@ -47,7 +47,7 @@ fun NQueensBoardGameScreen(
     viewModel: NQueensBoardGameViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+
     NQueensGameScreenContent(
         uiState = uiState,
         onPauseToggle = {
@@ -89,22 +89,21 @@ fun NQueensGameScreenContent(
                 onPauseToggle = onPauseToggle,
                 onResetGame = onResetGame
             )
-            
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             // Board section
             BoardSection(
                 boardState = uiState.boardState,
                 isGamePaused = uiState.isGamePaused,
                 modifier = Modifier.weight(1f)
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             // Game status section
             GameStatusSection(
                 isGameCompleted = uiState.isGameCompleted,
-                queensPlaced = uiState.queensPlaced,
                 totalQueens = uiState.totalQueens
             )
         }
@@ -143,7 +142,7 @@ fun GameHeaderSection(
                 queensPlaced = queensPlaced,
                 totalQueens = totalQueens
             )
-            
+
             // Game controls (center)
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -158,9 +157,9 @@ fun GameHeaderSection(
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
-                
+
                 Spacer(modifier = Modifier.width(8.dp))
-                
+
                 IconButton(onClick = onResetGame) {
                     Icon(
                         imageVector = Icons.Default.Refresh,
@@ -169,7 +168,7 @@ fun GameHeaderSection(
                     )
                 }
             }
-            
+
             // Timer section (right)
             TimerSection(
                 timeElapsed = timeElapsed,
@@ -208,9 +207,9 @@ fun PlayerInfoSection(
                     fontSize = 18.sp
                 )
             }
-            
+
             Spacer(modifier = Modifier.width(12.dp))
-            
+
             Column {
                 Text(
                     text = playerName,
@@ -276,46 +275,39 @@ fun BoardSection(
     isGamePaused: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            BoardView(
-                boardState = boardState,
-                modifier = Modifier.padding(8.dp)
-            )
-            
-            // Pause overlay
-            if (isGamePaused) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Color.Black.copy(alpha = 0.5f),
-                            RoundedCornerShape(12.dp)
-                        ),
-                    contentAlignment = Alignment.Center
+        BoardView(
+            boardState = boardState,
+            modifier = Modifier
+        )
+
+        // Pause overlay
+        if (isGamePaused) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Color.Black.copy(alpha = 0.5f),
+                        RoundedCornerShape(12.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
                 ) {
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        )
-                    ) {
-                        Text(
-                            text = "PAUSED",
-                            modifier = Modifier.padding(24.dp),
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
+                    Text(
+                        text = "PAUSED",
+                        modifier = Modifier.padding(24.dp),
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         }
@@ -325,7 +317,6 @@ fun BoardSection(
 @Composable
 fun GameStatusSection(
     isGameCompleted: Boolean,
-    queensPlaced: Int,
     totalQueens: Int,
     modifier: Modifier = Modifier
 ) {
@@ -367,7 +358,7 @@ fun NQueensGameScreenPreview() {
         queensPlaced = 3,
         totalQueens = 8
     )
-    
+
     NQueensGameTheme {
         NQueensGameScreenContent(
             uiState = mockUiState,
@@ -382,7 +373,7 @@ fun NQueensGameScreenPreview() {
 fun NQueensGameScreenPausedPreview() {
     val mockGame = NQueensBoardGame(8)
     val mockGameState = NQueensBoardGameBoardState(mockGame)
-    
+
     val mockUiState = NQueensGameUiState(
         playerName = "Bob",
         boardState = mockGameState,
@@ -391,7 +382,7 @@ fun NQueensGameScreenPausedPreview() {
         queensPlaced = 5,
         totalQueens = 8
     )
-    
+
     NQueensGameTheme {
         NQueensGameScreenContent(
             uiState = mockUiState,
@@ -406,7 +397,7 @@ fun NQueensGameScreenPausedPreview() {
 fun NQueensGameScreenCompletedPreview() {
     val mockGame = NQueensBoardGame(8)
     val mockGameState = NQueensBoardGameBoardState(mockGame)
-    
+
     val mockUiState = NQueensGameUiState(
         playerName = "Charlie",
         boardState = mockGameState,
@@ -415,7 +406,7 @@ fun NQueensGameScreenCompletedPreview() {
         queensPlaced = 8,
         totalQueens = 8
     )
-    
+
     NQueensGameTheme {
         NQueensGameScreenContent(
             uiState = mockUiState,
