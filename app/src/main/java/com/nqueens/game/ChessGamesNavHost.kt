@@ -17,16 +17,14 @@ fun ChessGamesNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
     ) {
         composable(Screens.MENU.route) {
-            MainMenuScreen {  }
+            MainMenuScreen { }
         }
         composable(Screens.BOARD_GAME.route) {
-
         }
         composable(Screens.LEADERBOARDS.route) {
-
         }
     }
 }

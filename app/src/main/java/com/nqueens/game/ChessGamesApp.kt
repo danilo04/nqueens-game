@@ -10,12 +10,13 @@ import com.nqueens.game.core.design.theme.ChessGamesTheme
 fun ChessGamesApp() {
     ChessGamesTheme {
 //        val navController = rememberNavController()
-        //val navigator = NavControllerNavigator(navController)
+        // val navigator = NavControllerNavigator(navController)
 
 //        CompositionLocalProvider(LocalNavigator provides navigator) {
         Surface(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .fillMaxSize(),
         ) {
             ChessGamesNavHost()
         }
