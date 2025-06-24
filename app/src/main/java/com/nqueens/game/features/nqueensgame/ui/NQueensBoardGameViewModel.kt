@@ -1,0 +1,112 @@
+package com.nqueens.game.features.nqueensgame.ui
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.nqueens.game.common.domain.games.GameState
+import com.nqueens.game.features.nqueensgame.domain.NQueensBoardGame
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+data class NQueensGameUiState(
+    val playerName: String = "Player",
+    val boardState: NQueensBoardGameBoardState,
+    val timeElapsed: Long = 0L, // in seconds
+    val isGamePaused: Boolean = false,
+    val isGameCompleted: Boolean = false,
+    val queensPlaced: Int = 0,
+    val totalQueens: Int = 8
+)
+
+@HiltViewModel
+class NQueensBoardGameViewModel @Inject constructor() : ViewModel() {
+    private val nQueensBoardGame = NQueensBoardGame(8) // Default 8x8 board
+    private val boardState = NQueensBoardGameBoardState(nQueensBoardGame)
+    
+    private val _uiState = MutableStateFlow(
+        NQueensGameUiState(
+            boardState = boardState,
+            totalQueens = nQueensBoardGame.board.size
+        )
+    )
+    val uiState: StateFlow<NQueensGameUiState> = _uiState.asStateFlow()
+    
+    private var timerJob: Job? = null
+    
+    init {
+        startTimer()
+        viewModelScope.launch {
+            nQueensBoardGame.queensInPlace
+                .combine(nQueensBoardGame.gameState) { queensPlaced, gameState ->
+                    
+                    _uiState.value = _uiState.value.copy(
+                        isGameCompleted = gameState == GameState.SOLVED,
+                        queensPlaced = queensPlaced
+                    )
+                }
+        }
+    }
+    
+    fun pauseGame() {
+        _uiState.value = _uiState.value.copy(isGamePaused = true)
+        stopTimer()
+    }
+    
+    fun resumeGame() {
+        _uiState.value = _uiState.value.copy(isGamePaused = false)
+        startTimer()
+    }
+    
+    fun resetGame() {
+        stopTimer()
+        _uiState.value.boardState.resetGame()
+        _uiState.value = _uiState.value.copy(
+            timeElapsed = 0L,
+            isGameCompleted = false,
+            queensPlaced = 0,
+            isGamePaused = false
+        )
+        startTimer()
+    }
+    
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (!_uiState.value.isGameCompleted && !_uiState.value.isGamePaused) {
+                delay(1000L)
+                _uiState.value = _uiState.value.copy(
+                    timeElapsed = _uiState.value.timeElapsed + 1
+                )
+            }
+        }
+    }
+    
+    private fun stopTimer() {
+        timerJob?.cancel()
+        timerJob = null
+    }
+    
+    private fun updateQueensCount() {
+        val queensCount = nQueensBoardGame.board.getPiecesOnBoard().size
+        _uiState.value = _uiState.value.copy(queensPlaced = queensCount)
+    }
+    
+    private fun checkGameCompletion() {
+        val currentState = _uiState.value
+        if (currentState.queensPlaced == currentState.totalQueens) {
+            // Here you could add logic to check if the solution is valid
+            _uiState.value = currentState.copy(isGameCompleted = true)
+            stopTimer()
+        }
+    }
+    
+    override fun onCleared() {
+        super.onCleared()
+        stopTimer()
+    }
+}
