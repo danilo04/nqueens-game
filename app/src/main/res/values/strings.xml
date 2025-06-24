@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">nqueens-game</string>
+    <string name="app_name">Chess Games App</string>
     
     <!-- Main Menu Screen -->
     <string name="main_menu_title">N-Queens Puzzle</string>

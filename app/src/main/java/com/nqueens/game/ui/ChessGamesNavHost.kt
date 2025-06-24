@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.nqueens.game.features.mainmenu.ui.MainMenuScreen
 
 @Composable
-fun NQueensGameNavHost(
+fun ChessGamesNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = Screens.MENU.route,
