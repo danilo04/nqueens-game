@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nqueens.game.R
 import com.nqueens.game.core.board.ui.components.BoardView
 import com.nqueens.game.core.design.theme.ChessGamesTheme
+import com.nqueens.game.core.utils.ui.rememberAppState
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.ui.state.NQueensBoardUiState
 
@@ -67,6 +68,11 @@ fun NQueensGameScreen(
             },
         )
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    val appInForeground = rememberAppState()
+    if (!appInForeground.value) {
+        viewModel.pauseGame()
+    }
 
     Scaffold(
         topBar = {
