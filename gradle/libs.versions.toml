@@ -17,9 +17,11 @@ mockito-kotlin = '5.4.0'
 kotlinx-coroutines = '1.10.1'
 androidx-arch-core = '2.2.0'
 assertj = '3.27.3'
+turbine = '1.2.0'
 detekt = '1.23.7'
 ktlint = '12.1.1'
 versions = '0.51.0'
+konfetti = '2.0.4'
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,6 +54,8 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 androidx-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidx-arch-core" }
 assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+konfetti-compose = { group = "nl.dionsegijn", name = "konfetti-compose", version.ref = "konfetti" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

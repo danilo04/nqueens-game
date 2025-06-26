@@ -74,7 +74,7 @@ fun RowScope.BoardCell(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .padding(8.dp),
+                        .padding(4.dp),
             )
 
             // Add X icon overlay when selected for deletion
