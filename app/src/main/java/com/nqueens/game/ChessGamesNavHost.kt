@@ -49,7 +49,7 @@ fun ChessGamesNavHost(
             NQueensGameScreen(
                 playerName = playerName ?: "Player",
                 queensCount = queensCount ?: 8,
-                onNavigateBack = { navController.popBackStack() },
+                onNavigateBack = { navController.popBackStack(Screens.MENU.route, false) },
             )
         }
 
