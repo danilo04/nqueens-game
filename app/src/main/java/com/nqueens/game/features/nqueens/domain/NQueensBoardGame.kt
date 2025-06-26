@@ -95,6 +95,7 @@ class NQueensBoardGame(
         _gameState.value = GameState.NOT_STARTED
         boardPositionsAttacked.clear()
         _queensPlaced.value = 0
+        initialize()
     }
 }
 

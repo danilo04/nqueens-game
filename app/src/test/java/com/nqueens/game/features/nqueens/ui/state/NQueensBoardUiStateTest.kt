@@ -189,7 +189,7 @@ class NQueensBoardUiStateTest {
         }
 
     @Test
-    fun `when resetting game, then all flows emit reset states`() =
+    fun `when resetting game, then all flows emit reset states and initialize`() =
         runTest {
             // Given - Place some pieces and create error state
             realGame.insertPiece(QueenPiece(PieceColor.WHITE), BoardPosition.of(0, 0))
@@ -209,6 +209,9 @@ class NQueensBoardUiStateTest {
                 // Should emit NOT_STARTED state
                 val resetState = awaitItem()
                 assertThat(resetState).isEqualTo(GameState.NOT_STARTED)
+
+                val initializedState = awaitItem()
+                assertThat(initializedState).isEqualTo(GameState.IN_PROGRESS)
             }
 
             // Test queens count flow during reset
@@ -227,19 +230,11 @@ class NQueensBoardUiStateTest {
         runTest {
             // When/Then - Test solving the game using Turbine
             realGame.gameState.test {
-                skipItems(1) // Skip initial state
-
+                assertThat(awaitItem()).isEqualTo(GameState.IN_PROGRESS)
                 // Place queens in a valid 4x4 solution: (1,0), (3,1), (0,2), (2,3)
                 uiState.tapOnCell(1, 0)
-                // Skip intermediate states as needed
-                skipItems(1) // Skip any intermediate game state changes
-
                 uiState.tapOnCell(3, 1)
-                skipItems(1)
-
                 uiState.tapOnCell(0, 2)
-                skipItems(1)
-
                 uiState.tapOnCell(2, 3)
 
                 // Should emit solved state
