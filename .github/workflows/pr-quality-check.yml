@@ -4,6 +4,12 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  checks: write
+
 jobs:
   quality-gate:
     name: Quality Gate

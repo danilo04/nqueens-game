@@ -11,6 +11,10 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+  releases: write
+
 jobs:
   quality-gate:
     name: Pre-Release Quality Gate

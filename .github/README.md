@@ -8,7 +8,6 @@ This project includes comprehensive GitHub Actions workflows for automated testi
 **Triggers:** Push to `main`/`develop`, Pull Requests
 - **Code Quality**: Runs Ktlint and Detekt analysis
 - **Unit Tests**: Executes all unit tests with JUnit
-- **Android Tests**: Runs instrumentation tests on Android emulator
 - **Build**: Creates debug APK
 - **Artifacts**: Uploads reports and APK files
 
@@ -43,7 +42,6 @@ This project includes comprehensive GitHub Actions workflows for automated testi
 
 ### Testing
 - ✅ **Unit Tests**: JUnit with Mockito
-- ✅ **Android Instrumentation Tests**: UI and integration tests
 - ✅ **Test Reports**: Automatic upload and GitHub integration
 
 ### Security
@@ -118,10 +116,7 @@ For a release to be created:
 # Unit tests
 ./gradlew test
 
-# Android tests (requires emulator/device)
-./gradlew connectedAndroidTest
-
-# All tests
+# All tests and checks
 ./gradlew check
 ```
 
@@ -161,9 +156,9 @@ You can manually trigger workflows from the GitHub Actions tab:
 
 ### Common Issues
 1. **Gradle Permission Denied**: Ensure `gradlew` is executable
-2. **Android Emulator Fails**: Check API level compatibility
-3. **Quality Checks Fail**: Run `./code-quality.sh format` locally
-4. **Tests Timeout**: Increase timeout in workflow files
+2. **Quality Checks Fail**: Run `./code-quality.sh format` locally
+3. **Tests Timeout**: Increase timeout in workflow files
+4. **Build Failures**: Check Gradle wrapper and dependencies
 
 ### Getting Help
 - Check workflow logs in GitHub Actions tab
@@ -172,7 +167,7 @@ You can manually trigger workflows from the GitHub Actions tab:
 - Consult individual tool documentation:
   - [Detekt](https://detekt.dev/)
   - [Ktlint](https://ktlint.github.io/)
-  - [Android Testing](https://developer.android.com/training/testing)
+  - [JUnit Testing](https://junit.org/junit5/docs/current/user-guide/)
 
 ---
 
