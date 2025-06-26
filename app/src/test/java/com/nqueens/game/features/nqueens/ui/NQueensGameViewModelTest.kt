@@ -8,6 +8,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
+import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NQueensGameViewModelTest : BaseUnitTest() {
@@ -26,5 +27,9 @@ class NQueensGameViewModelTest : BaseUnitTest() {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `given an empty test`() {
     }
 }
