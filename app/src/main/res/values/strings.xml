@@ -28,6 +28,10 @@
     <string name="game_paused">PAUSED</string>
     <string name="congratulations_title">🎉 Congratulations!</string>
     <string name="puzzle_completed_message">You\'ve completed the %1$d Queens Puzzle!</string>
+    <plurals name="queens_left">
+        <item quantity="one">%d Queen left</item>
+        <item quantity="other">%d Queens left</item>
+    </plurals>
 
     <string name="delete">Delete</string>
 </resources>
