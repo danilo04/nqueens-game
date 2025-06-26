@@ -1,6 +1,7 @@
 package com.nqueens.game.features.nqueens.ui
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -60,6 +61,12 @@ import com.nqueens.game.core.design.theme.ChessGamesTheme
 import com.nqueens.game.core.utils.ui.rememberAppState
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.ui.state.NQueensBoardUiState
+import kotlinx.coroutines.delay
+import nl.dionsegijn.konfetti.compose.KonfettiView
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,36 +134,66 @@ fun NQueensGameScreenContent(
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
-    ) {
-        if (isLandscape) {
-            // Landscape layout: Board on left, info on right
-            Row(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                // Board section (left side) - takes available height
-                BoardSection(
-                    boardState = uiState.boardState,
-                    isGamePaused = uiState.isGamePaused,
-                    modifier =
-                        Modifier
-                            .fillMaxHeight()
-                            .aspectRatio(1f)
-                            .padding(start = 5.dp),
-                )
-
-                // Info section (right side)
-                Column(
-                    modifier =
-                        Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                            .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+    Box(modifier = modifier.fillMaxSize()) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            if (isLandscape) {
+                // Landscape layout: Board on left, info on right
+                Row(
+                    modifier = Modifier.fillMaxSize(),
                 ) {
-                    // Game header info
+                    // Board section (left side) - takes available height
+                    BoardSection(
+                        boardState = uiState.boardState,
+                        isGamePaused = uiState.isGamePaused,
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .aspectRatio(1f)
+                                .padding(start = 5.dp),
+                    )
+
+                    // Info section (right side)
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .weight(1f)
+                                .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        // Game header info
+                        GameHeaderSection(
+                            playerName = uiState.playerName,
+                            timeElapsed = uiState.timeElapsed,
+                            queensPlaced = uiState.queensPlaced,
+                            totalQueens = uiState.totalQueens,
+                            isGamePaused = uiState.isGamePaused,
+                            isGameCompleted = uiState.isGameCompleted,
+                            onPauseToggle = onPauseToggle,
+                            onResetGame = onResetGame,
+                            isLandScape = true,
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        // Game status section
+                        GameStatusSection(
+                            isGameCompleted = uiState.isGameCompleted,
+                            totalQueens = uiState.totalQueens,
+                            onNewGame = onResetGame,
+                            onMainMenu = onNavigateToMainMenu,
+                        )
+                    }
+                }
+            } else {
+                // Portrait layout: Original vertical layout
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    // Top section with player info and timer (chess.com style)
                     GameHeaderSection(
                         playerName = uiState.playerName,
                         timeElapsed = uiState.timeElapsed,
@@ -166,10 +203,20 @@ fun NQueensGameScreenContent(
                         isGameCompleted = uiState.isGameCompleted,
                         onPauseToggle = onPauseToggle,
                         onResetGame = onResetGame,
-                        isLandScape = true,
+                        isLandScape = false,
+                        modifier = Modifier.padding(16.dp),
                     )
 
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    // Board section
+                    BoardSection(
+                        boardState = uiState.boardState,
+                        isGamePaused = uiState.isGamePaused,
+                        modifier = Modifier.weight(1f),
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     // Game status section
                     GameStatusSection(
@@ -180,44 +227,11 @@ fun NQueensGameScreenContent(
                     )
                 }
             }
-        } else {
-            // Portrait layout: Original vertical layout
-            Column(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                // Top section with player info and timer (chess.com style)
-                GameHeaderSection(
-                    playerName = uiState.playerName,
-                    timeElapsed = uiState.timeElapsed,
-                    queensPlaced = uiState.queensPlaced,
-                    totalQueens = uiState.totalQueens,
-                    isGamePaused = uiState.isGamePaused,
-                    isGameCompleted = uiState.isGameCompleted,
-                    onPauseToggle = onPauseToggle,
-                    onResetGame = onResetGame,
-                    isLandScape = false,
-                    modifier = Modifier.padding(16.dp),
-                )
+        }
 
-                Spacer(modifier = Modifier.height(10.dp))
-
-                // Board section
-                BoardSection(
-                    boardState = uiState.boardState,
-                    isGamePaused = uiState.isGamePaused,
-                    modifier = Modifier.weight(1f),
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Game status section
-                GameStatusSection(
-                    isGameCompleted = uiState.isGameCompleted,
-                    totalQueens = uiState.totalQueens,
-                    onNewGame = onResetGame,
-                    onMainMenu = onNavigateToMainMenu,
-                )
-            }
+        // Confetti overlay when game is completed
+        if (uiState.isGameCompleted) {
+            ConfettiAnimation()
         }
     }
 }
@@ -465,7 +479,7 @@ fun BoardSection(
 }
 
 @Composable
-fun GameCompletionDialog(
+private fun GameCompletionDialog(
     totalQueens: Int,
     onNewGame: () -> Unit,
     onMainMenu: () -> Unit,
@@ -518,30 +532,22 @@ fun GameCompletionDialog(
 }
 
 @Composable
-fun ConfettiAnimation() {
-    Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(100.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        // Simple confetti representation using emojis
-        val confettiEmojis = listOf("🎉", "🎊", "✨", "🌟", "💫")
+private fun ConfettiAnimation() {
+    val party =
+        Party(
+            speed = 0f,
+            maxSpeed = 30f,
+            damping = 0.9f,
+            spread = 45,
+            colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
+            emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(100),
+            position = Position.Relative(0.5, 0.3),
+        )
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            confettiEmojis.forEach { emoji ->
-                Text(
-                    text = emoji,
-                    fontSize = 24.sp,
-                    modifier = Modifier.padding(4.dp),
-                )
-            }
-        }
-    }
+    KonfettiView(
+        modifier = Modifier.fillMaxSize(),
+        parties = listOf(party),
+    )
 }
 
 @Composable
@@ -555,11 +561,14 @@ fun GameStatusSection(
 
     LaunchedEffect(isGameCompleted) {
         if (isGameCompleted) {
+            delay(800) // Wait 800 milliseconds before showing the dialog
             showDialog = true
         }
     }
 
-    if (showDialog && isGameCompleted) {
+    AnimatedVisibility(
+        visible = showDialog && isGameCompleted,
+    ) {
         GameCompletionDialog(
             totalQueens = totalQueens,
             onNewGame = {
