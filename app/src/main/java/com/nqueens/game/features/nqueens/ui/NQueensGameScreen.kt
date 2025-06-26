@@ -1,11 +1,14 @@
 package com.nqueens.game.features.nqueens.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -103,44 +107,96 @@ fun NQueensGameScreenContent(
     onResetGame: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
     ) {
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-        ) {
-            // Top section with player info and timer (chess.com style)
-            GameHeaderSection(
-                playerName = uiState.playerName,
-                timeElapsed = uiState.timeElapsed,
-                queensPlaced = uiState.queensPlaced,
-                totalQueens = uiState.totalQueens,
-                isGamePaused = uiState.isGamePaused,
-                isGameCompleted = uiState.isGameCompleted,
-                onPauseToggle = onPauseToggle,
-                onResetGame = onResetGame,
-            )
+        if (isLandscape) {
+            // Landscape layout: Board on left, info on right
+            Row(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                // Board section (left side) - takes available height
+                BoardSection(
+                    boardState = uiState.boardState,
+                    isGamePaused = uiState.isGamePaused,
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .aspectRatio(1f)
+                            .padding(start = 5.dp),
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                // Info section (right side)
+                Column(
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    // Game header info
+                    GameHeaderSection(
+                        playerName = uiState.playerName,
+                        timeElapsed = uiState.timeElapsed,
+                        queensPlaced = uiState.queensPlaced,
+                        totalQueens = uiState.totalQueens,
+                        isGamePaused = uiState.isGamePaused,
+                        isGameCompleted = uiState.isGameCompleted,
+                        onPauseToggle = onPauseToggle,
+                        onResetGame = onResetGame,
+                        isLandScape = isLandscape,
+                    )
 
-            // Board section
-            BoardSection(
-                boardState = uiState.boardState,
-                isGamePaused = uiState.isGamePaused,
-                modifier = Modifier.weight(1f),
-            )
+                    Spacer(modifier = Modifier.weight(1f))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                    // Game status section
+                    GameStatusSection(
+                        isGameCompleted = uiState.isGameCompleted,
+                        totalQueens = uiState.totalQueens,
+                    )
+                }
+            }
+        } else {
+            // Portrait layout: Original vertical layout
+            Column(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                // Top section with player info and timer (chess.com style)
+                GameHeaderSection(
+                    playerName = uiState.playerName,
+                    timeElapsed = uiState.timeElapsed,
+                    queensPlaced = uiState.queensPlaced,
+                    totalQueens = uiState.totalQueens,
+                    isGamePaused = uiState.isGamePaused,
+                    isGameCompleted = uiState.isGameCompleted,
+                    onPauseToggle = onPauseToggle,
+                    onResetGame = onResetGame,
+                    isLandScape = isLandscape,
+                    modifier = Modifier.padding(16.dp),
+                )
 
-            // Game status section
-            GameStatusSection(
-                isGameCompleted = uiState.isGameCompleted,
-                totalQueens = uiState.totalQueens,
-            )
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Board section
+                BoardSection(
+                    boardState = uiState.boardState,
+                    isGamePaused = uiState.isGamePaused,
+                    modifier = Modifier.weight(1f),
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Game status section
+                GameStatusSection(
+                    isGameCompleted = uiState.isGameCompleted,
+                    totalQueens = uiState.totalQueens,
+                )
+            }
         }
     }
 }
@@ -153,6 +209,7 @@ fun GameHeaderSection(
     totalQueens: Int,
     isGamePaused: Boolean,
     isGameCompleted: Boolean,
+    isLandScape: Boolean,
     onPauseToggle: () -> Unit,
     onResetGame: () -> Unit,
     modifier: Modifier = Modifier,
@@ -165,53 +222,76 @@ fun GameHeaderSection(
             ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+        val isLandScapeModifier =
+            if (isLandScape) {
+                modifier.padding(horizontal = 16.dp)
+            } else {
+                modifier
+            }
+        Column(
+            modifier = isLandScapeModifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Player info section (left)
-            PlayerInfoSection(
-                playerName = playerName,
-                queensPlaced = queensPlaced,
-                totalQueens = totalQueens,
-            )
-
-            // Game controls (center)
             Row(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconButton(
-                    onClick = onPauseToggle,
-                    enabled = !isGameCompleted,
+                // Player info section (left)
+                PlayerInfoSection(
+                    playerName = playerName,
+                    queensPlaced = queensPlaced,
+                    totalQueens = totalQueens,
+                )
+
+                // Game controls (center)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(
-                        imageVector = if (isGamePaused) Icons.Default.PlayArrow else Icons.Default.Pause,
-                        contentDescription = if (isGamePaused) "Resume" else "Pause",
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
+                    IconButton(
+                        onClick = onPauseToggle,
+                        enabled = !isGameCompleted,
+                    ) {
+                        Icon(
+                            imageVector = if (isGamePaused) Icons.Default.PlayArrow else Icons.Default.Pause,
+                            contentDescription = if (isGamePaused) "Resume" else "Pause",
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    IconButton(onClick = onResetGame) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Reset Game",
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.width(8.dp))
-
-                IconButton(onClick = onResetGame) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Reset Game",
-                        tint = MaterialTheme.colorScheme.primary,
+                if (!isLandScape) {
+                    // Timer section (right)
+                    TimerSection(
+                        timeElapsed = timeElapsed,
+                        isGamePaused = isGamePaused,
+                        isGameCompleted = isGameCompleted,
                     )
                 }
             }
 
-            // Timer section (right)
-            TimerSection(
-                timeElapsed = timeElapsed,
-                isGamePaused = isGamePaused,
-                isGameCompleted = isGameCompleted,
-            )
+            if (isLandScape) {
+                // Timer section (centered in landscape)
+                TimerSection(
+                    timeElapsed = timeElapsed,
+                    isGamePaused = isGamePaused,
+                    isGameCompleted = isGameCompleted,
+                    modifier = Modifier.padding(bottom = 16.dp),
+                )
+            }
         }
     }
 }
@@ -450,6 +530,35 @@ fun NQueensGameScreenCompletedPreview() {
             timeElapsed = 180L, // 3:00
             isGameCompleted = true,
             queensPlaced = 8,
+            totalQueens = 8,
+        )
+
+    ChessGamesTheme {
+        NQueensGameScreenContent(
+            uiState = mockUiState,
+            onPauseToggle = { },
+            onResetGame = { },
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    widthDp = 800,
+    heightDp = 480,
+    name = "Landscape Preview",
+)
+@Composable
+fun NQueensGameScreenLandscapePreview() {
+    val mockGame = NQueensBoardGame(8)
+    val mockGameState = NQueensBoardUiState(mockGame)
+
+    val mockUiState =
+        NQueensGameUiState(
+            playerName = "Alice",
+            boardState = mockGameState,
+            timeElapsed = 125L, // 2:05
+            queensPlaced = 3,
             totalQueens = 8,
         )
 
