@@ -20,6 +20,7 @@ assertj = '3.27.3'
 turbine = '1.2.0'
 detekt = '1.23.7'
 ktlint = '12.1.1'
+versions = '0.51.0'
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,4 +64,5 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
 
