@@ -99,12 +99,6 @@ jobs:
           app/build/test-results/
         retention-days: 30
 
-    - name: Upload test results to GitHub
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
-      with:
-        files: app/build/test-results/**/*.xml
-
   build:
     name: Build APK
     runs-on: ubuntu-latest
