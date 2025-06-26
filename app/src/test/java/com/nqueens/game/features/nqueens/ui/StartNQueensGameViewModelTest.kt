@@ -90,10 +90,10 @@ class StartNQueensGameViewModelTest {
         }
 
     @Test
-    fun `form should be invalid when queens count is greater than 11`() =
+    fun `form should be invalid when queens count is greater than 12`() =
         runTest {
             viewModel.updatePlayerName("TestPlayer")
-            viewModel.updateNumberOfQueens("12")
+            viewModel.updateNumberOfQueens("13")
             val state = viewModel.uiState.first()
 
             assertFalse(state.isFormValid)
