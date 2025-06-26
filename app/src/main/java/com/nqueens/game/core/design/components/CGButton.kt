@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -16,6 +17,10 @@ fun CGButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    colors: ButtonColors =
+        ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+        ),
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(
@@ -24,10 +29,7 @@ fun CGButton(
             modifier
                 .fillMaxWidth()
                 .height(56.dp),
-        colors =
-            ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-            ),
+        colors = colors,
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
         content = content,

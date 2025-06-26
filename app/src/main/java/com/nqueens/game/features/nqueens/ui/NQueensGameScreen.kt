@@ -22,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -33,6 +34,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,13 +46,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nqueens.game.R
 import com.nqueens.game.core.board.ui.components.BoardView
+import com.nqueens.game.core.design.components.CGButton
 import com.nqueens.game.core.design.theme.ChessGamesTheme
 import com.nqueens.game.core.utils.ui.rememberAppState
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
@@ -101,6 +110,7 @@ fun NQueensGameScreen(
                 }
             },
             onResetGame = viewModel::resetGame,
+            onNavigateToMainMenu = onNavigateBack,
             modifier = modifier.padding(paddingValues),
         )
     }
@@ -111,6 +121,7 @@ fun NQueensGameScreenContent(
     uiState: NQueensGameUiState,
     onPauseToggle: () -> Unit,
     onResetGame: () -> Unit,
+    onNavigateToMainMenu: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val configuration = LocalConfiguration.current
@@ -155,7 +166,7 @@ fun NQueensGameScreenContent(
                         isGameCompleted = uiState.isGameCompleted,
                         onPauseToggle = onPauseToggle,
                         onResetGame = onResetGame,
-                        isLandScape = isLandscape,
+                        isLandScape = true,
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -164,6 +175,8 @@ fun NQueensGameScreenContent(
                     GameStatusSection(
                         isGameCompleted = uiState.isGameCompleted,
                         totalQueens = uiState.totalQueens,
+                        onNewGame = onResetGame,
+                        onMainMenu = onNavigateToMainMenu,
                     )
                 }
             }
@@ -182,7 +195,7 @@ fun NQueensGameScreenContent(
                     isGameCompleted = uiState.isGameCompleted,
                     onPauseToggle = onPauseToggle,
                     onResetGame = onResetGame,
-                    isLandScape = isLandscape,
+                    isLandScape = false,
                     modifier = Modifier.padding(16.dp),
                 )
 
@@ -201,6 +214,8 @@ fun NQueensGameScreenContent(
                 GameStatusSection(
                     isGameCompleted = uiState.isGameCompleted,
                     totalQueens = uiState.totalQueens,
+                    onNewGame = onResetGame,
+                    onMainMenu = onNavigateToMainMenu,
                 )
             }
         }
@@ -263,7 +278,14 @@ fun GameHeaderSection(
                     ) {
                         Icon(
                             imageVector = if (isGamePaused) Icons.Default.PlayArrow else Icons.Default.Pause,
-                            contentDescription = if (isGamePaused) "Resume" else "Pause",
+                            contentDescription =
+                                if (isGamePaused) {
+                                    stringResource(
+                                        R.string.resume_game,
+                                    )
+                                } else {
+                                    stringResource(R.string.pause_game)
+                                },
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     }
@@ -273,7 +295,7 @@ fun GameHeaderSection(
                     IconButton(onClick = onResetGame) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
-                            contentDescription = "Reset Game",
+                            contentDescription = stringResource(R.string.reset_game),
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     }
@@ -342,7 +364,7 @@ fun PlayerInfoSection(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = "$queensPlaced/$totalQueens Queens",
+                    text = "$queensPlaced/$totalQueens ${stringResource(R.string.queens_count)}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -377,7 +399,7 @@ fun TimerSection(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Time",
+                text = stringResource(R.string.time_label),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -430,7 +452,7 @@ fun BoardSection(
                         ),
                 ) {
                     Text(
-                        text = "PAUSED",
+                        text = stringResource(R.string.game_paused),
                         modifier = Modifier.padding(24.dp),
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
@@ -443,28 +465,115 @@ fun BoardSection(
 }
 
 @Composable
+fun GameCompletionDialog(
+    totalQueens: Int,
+    onNewGame: () -> Unit,
+    onMainMenu: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(dismissOnClickOutside = false),
+        confirmButton = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                CGButton(
+                    onClick = onMainMenu,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(stringResource(R.string.main_menu))
+                }
+                CGButton(
+                    onClick = onNewGame,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(stringResource(R.string.new_game))
+                }
+            }
+        },
+        title = {
+            Text(
+                text = stringResource(R.string.congratulations_title),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(R.string.puzzle_completed_message, totalQueens),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                )
+            }
+        },
+    )
+}
+
+@Composable
+fun ConfettiAnimation() {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(100.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        // Simple confetti representation using emojis
+        val confettiEmojis = listOf("🎉", "🎊", "✨", "🌟", "💫")
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            confettiEmojis.forEach { emoji ->
+                Text(
+                    text = emoji,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(4.dp),
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun GameStatusSection(
     isGameCompleted: Boolean,
     totalQueens: Int,
-    modifier: Modifier = Modifier,
+    onNewGame: () -> Unit,
+    onMainMenu: () -> Unit,
 ) {
-    if (isGameCompleted) {
-        Card(
-            modifier = modifier.fillMaxWidth(),
-            colors =
-                CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                ),
-        ) {
-            Text(
-                text = "🎉 Congratulations! You've placed all $totalQueens queens!",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            )
+    var showDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isGameCompleted) {
+        if (isGameCompleted) {
+            showDialog = true
         }
+    }
+
+    if (showDialog && isGameCompleted) {
+        GameCompletionDialog(
+            totalQueens = totalQueens,
+            onNewGame = {
+                showDialog = false
+                onNewGame()
+            },
+            onMainMenu = {
+                showDialog = false
+                onMainMenu()
+            },
+            onDismiss = {
+                showDialog = false
+            },
+        )
     }
 }
 
@@ -494,6 +603,7 @@ fun NQueensGameScreenPreview() {
             uiState = mockUiState,
             onPauseToggle = { },
             onResetGame = { },
+            onNavigateToMainMenu = { },
         )
     }
 }
@@ -518,6 +628,7 @@ fun NQueensGameScreenPausedPreview() {
         NQueensGameScreenContent(
             uiState = mockUiState,
             onPauseToggle = { },
+            onNavigateToMainMenu = {},
             onResetGame = { },
         )
     }
@@ -544,6 +655,7 @@ fun NQueensGameScreenCompletedPreview() {
             uiState = mockUiState,
             onPauseToggle = { },
             onResetGame = { },
+            onNavigateToMainMenu = {},
         )
     }
 }
@@ -573,6 +685,7 @@ fun NQueensGameScreenLandscapePreview() {
             uiState = mockUiState,
             onPauseToggle = { },
             onResetGame = { },
+            onNavigateToMainMenu = {},
         )
     }
 }
