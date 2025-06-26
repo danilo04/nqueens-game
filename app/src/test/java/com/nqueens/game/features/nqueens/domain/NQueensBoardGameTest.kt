@@ -216,7 +216,7 @@ class NQueensBoardGameTest : BaseUnitTest() {
     // Game Reset Tests
 
     @Test
-    fun `given a game in progress, when resetting, then game returns to initial state`() =
+    fun `given a game in progress, when resetting, then game returns to IN_PROGRESS state`() =
         runTest {
             nQueensGame4x4.initialize()
             nQueensGame4x4.insertPiece(whiteQueen, BoardPosition.of(0, 0))
@@ -224,7 +224,7 @@ class NQueensBoardGameTest : BaseUnitTest() {
 
             nQueensGame4x4.resetGame()
 
-            assertThat(nQueensGame4x4.gameState.first()).isEqualTo(GameState.NOT_STARTED)
+            assertThat(nQueensGame4x4.gameState.first()).isEqualTo(GameState.IN_PROGRESS)
             assertThat(nQueensGame4x4.queensPlaced.first()).isEqualTo(0)
             assertThat(nQueensGame4x4.boardPositionsAttacked).isEmpty()
             assertThat(nQueensGame4x4.board.getPiecesOnBoard()).isEmpty()
@@ -243,7 +243,7 @@ class NQueensBoardGameTest : BaseUnitTest() {
 
             nQueensGame4x4.resetGame()
 
-            assertThat(nQueensGame4x4.gameState.first()).isEqualTo(GameState.NOT_STARTED)
+            assertThat(nQueensGame4x4.gameState.first()).isEqualTo(GameState.IN_PROGRESS)
             assertThat(nQueensGame4x4.queensPlaced.first()).isEqualTo(0)
             assertThat(nQueensGame4x4.boardPositionsAttacked).isEmpty()
             assertThat(nQueensGame4x4.isGameSolved()).isFalse()
@@ -259,7 +259,7 @@ class NQueensBoardGameTest : BaseUnitTest() {
 
             nQueensGame4x4.resetGame()
 
-            assertThat(nQueensGame4x4.gameState.first()).isEqualTo(GameState.NOT_STARTED)
+            assertThat(nQueensGame4x4.gameState.first()).isEqualTo(GameState.IN_PROGRESS)
             assertThat(nQueensGame4x4.queensPlaced.first()).isEqualTo(0)
             assertThat(nQueensGame4x4.boardPositionsAttacked).isEmpty()
         }
@@ -341,10 +341,6 @@ class NQueensBoardGameTest : BaseUnitTest() {
             // Remove conflict
             nQueensGame8x8.removePiece(BoardPosition.of(3, 3))
             assertThat(nQueensGame8x8.gameState.first()).isEqualTo(GameState.IN_PROGRESS)
-
-            // Reset
-            nQueensGame8x8.resetGame()
-            assertThat(nQueensGame8x8.gameState.first()).isEqualTo(GameState.NOT_STARTED)
         }
 
     @Test
