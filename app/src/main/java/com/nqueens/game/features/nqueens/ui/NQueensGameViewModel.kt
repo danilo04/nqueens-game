@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.nqueens.game.core.board.domain.games.GameState
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.ui.state.NQueensBoardUiState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -13,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class NQueensGameUiState(
     val playerName: String = "Player",
@@ -25,16 +27,28 @@ data class NQueensGameUiState(
     val totalQueens: Int = 8,
 )
 
-@HiltViewModel
+@HiltViewModel(assistedFactory = NQueensGameViewModel.NQueensGameViewModelFactory::class)
 class NQueensGameViewModel
-    @Inject
-    constructor() : ViewModel() {
-        private val nQueensBoardGame = NQueensBoardGame(8) // Default 8x8 board
+    @AssistedInject
+    constructor(
+        @Assisted private val playerName: String,
+        @Assisted private val queensCount: Int,
+    ) : ViewModel() {
+        @AssistedFactory
+        interface NQueensGameViewModelFactory {
+            fun create(
+                playerName: String,
+                queensCount: Int,
+            ): NQueensGameViewModel
+        }
+
+        private val nQueensBoardGame = NQueensBoardGame(queensCount)
         private val boardState = NQueensBoardUiState(nQueensBoardGame)
 
         private val _uiState =
             MutableStateFlow(
                 NQueensGameUiState(
+                    playerName = playerName,
                     boardState = boardState,
                     totalQueens = nQueensBoardGame.board.size,
                 ),
@@ -104,5 +118,6 @@ class NQueensGameViewModel
         override fun onCleared() {
             super.onCleared()
             stopTimer()
+            boardState.resetGame()
         }
     }

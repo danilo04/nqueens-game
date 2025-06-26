@@ -20,7 +20,7 @@ class NQueensGameViewModelTest : BaseUnitTest() {
 
     @Before
     fun setUp() {
-        viewModel = NQueensGameViewModel()
+        viewModel = NQueensGameViewModel("Player Name", 8)
     }
 
     @Ignore

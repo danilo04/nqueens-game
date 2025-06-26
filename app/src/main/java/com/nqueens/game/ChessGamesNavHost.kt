@@ -3,9 +3,11 @@ package com.nqueens.game
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.nqueens.game.features.mainmenu.ui.MainMenuScreen
 import com.nqueens.game.features.nqueens.ui.NQueensGameScreen
 import com.nqueens.game.features.nqueens.ui.StartNQueensGameScreen
@@ -30,15 +32,27 @@ fun ChessGamesNavHost(
             StartNQueensGameScreen(
                 onNavigateBack = { navController.navigate(Screens.MENU.route) },
                 onStartGame = { playerName, queensCount ->
-                    navController.navigate(Screens.N_QUEENS_GAME.route)
+                    navController.navigate(NQueensGameArgs.createRoute(playerName, queensCount))
                 },
             )
         }
-        composable(Screens.N_QUEENS_GAME.route) {
-            NQueensGameScreen {
-                navController.popBackStack()
-            }
+        composable(
+            route = Screens.N_QUEENS_GAME.route,
+            arguments =
+                listOf(
+                    navArgument(NQueensGameArgs.PLAYER_NAME) { type = NavType.StringType },
+                    navArgument(NQueensGameArgs.QUEENS_COUNT) { type = NavType.IntType },
+                ),
+        ) { backStackEntry ->
+            val playerName = backStackEntry.arguments?.getString(NQueensGameArgs.PLAYER_NAME)
+            val queensCount = backStackEntry.arguments?.getInt(NQueensGameArgs.QUEENS_COUNT)
+            NQueensGameScreen(
+                playerName = playerName ?: "Player",
+                queensCount = queensCount ?: 8,
+                onNavigateBack = { navController.popBackStack() },
+            )
         }
+
         composable(Screens.LEADERBOARDS.route) {
         }
     }
