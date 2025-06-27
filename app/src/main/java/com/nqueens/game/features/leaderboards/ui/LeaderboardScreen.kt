@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -51,6 +52,7 @@ import com.nqueens.game.core.design.theme.ChessGamesTheme
 import com.nqueens.game.core.icons.ChessGamesIcons
 import com.nqueens.game.core.icons.pieces.BlackQueen
 import com.nqueens.game.core.icons.pieces.WhiteQueen
+import com.nqueens.game.core.utils.ui.OnBottomReached
 import com.nqueens.game.features.nqueens.ui.formatTime
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -177,6 +179,7 @@ private fun LeaderboardsContent(
                 }
 
                 // Games list
+                val lazyListState = rememberLazyListState()
                 LazyColumn(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -186,6 +189,10 @@ private fun LeaderboardsContent(
                             game = game,
                         )
                     }
+                }
+
+                lazyListState.OnBottomReached(10) {
+                    uiState.loadMore.invoke()
                 }
             }
         }
