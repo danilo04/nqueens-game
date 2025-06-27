@@ -8,6 +8,15 @@
     <string name="main_menu_leaderboards">Leaderboards</string>
     <string name="main_menu_exit">Exit</string>
 
+    <!-- Leaderboards Screen -->
+    <string name="leaderboards_title">Leaderboard</string>
+    <string name="leaderboards_error_title">Error</string>
+    <string name="leaderboards_no_games_title">No games played yet</string>
+    <string name="leaderboards_queens_size">%1$d × %2$d</string>
+    <string name="leaderboards_no_games_message">Complete some N-Queens puzzles to see your times here!</string>
+    <string name="leaderboards_filter_by_board_size">Filter by Board Size</string>
+    <string name="leaderboards_filter_all">All</string>
+
     <!-- Start Game Screen -->
     <string name="new_game">New Game</string>
     <string name="start_a_new_game">Start a New Game</string>

@@ -19,4 +19,14 @@ class NQueensGamesWonRepository
             withContext(ioThreadDispatcher) {
                 nQueensGamesWonDao.insertGame(game)
             }
+
+        suspend fun getAllGames(): List<NQueensGamesWon> =
+            withContext(ioThreadDispatcher) {
+                nQueensGamesWonDao.getAllGames()
+            }
+
+        suspend fun getGamesByQueensCount(queensCount: Int): List<NQueensGamesWon> =
+            withContext(ioThreadDispatcher) {
+                nQueensGamesWonDao.getGamesByQueensCount(queensCount)
+            }
     }
