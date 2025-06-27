@@ -7,11 +7,15 @@ import com.nqueens.game.core.board.domain.pieces.PieceColor
 import com.nqueens.game.core.board.domain.pieces.QueenPiece
 import com.nqueens.game.core.board.ui.state.BoardUiState
 import com.nqueens.game.core.board.ui.state.SelectedState
+import com.nqueens.game.core.haptic.HapticFeedbackInterface
+import com.nqueens.game.core.sound.SoundManagerInterface
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.domain.containsBoardPosition
 
 class NQueensBoardUiState(
     private val nQueensBoardGame: NQueensBoardGame,
+    private val soundManager: SoundManagerInterface,
+    private val hapticFeedbackManager: HapticFeedbackInterface,
 ) : BoardUiState(nQueensBoardGame) {
     override val boardSize: Int = nQueensBoardGame.board.size
 
@@ -35,9 +39,16 @@ class NQueensBoardUiState(
             }
             else -> {
                 clearAllSelections()
-                nQueensBoardGame.insertPiece(QueenPiece(PieceColor.WHITE), position)
+                val insertionSuccessful = nQueensBoardGame.insertPiece(QueenPiece(PieceColor.WHITE), position)
+
+                // Play sound only if the piece was successfully inserted
+                if (insertionSuccessful) {
+                    soundManager.playPutPieceSound()
+                }
+
                 if (nQueensBoardGame.gameState.value == GameState.BLOCKED) {
                     updateErrorStates()
+                    hapticFeedbackManager.provideErrorFeedback()
                 }
             }
         }

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.nqueens.game.core.board.domain.games.GameState
 import com.nqueens.game.core.data.database.entities.NQueensGamesWon
 import com.nqueens.game.core.data.repositories.NQueensGamesWonRepository
+import com.nqueens.game.core.haptic.HapticFeedbackManager
+import com.nqueens.game.core.sound.SoundManager
 import com.nqueens.game.core.utils.TimeProvider
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.ui.state.NQueensBoardUiState
@@ -36,6 +38,8 @@ class NQueensGameViewModel
     constructor(
         private val nQueensGamesWonRepository: NQueensGamesWonRepository,
         private val timeProvider: TimeProvider,
+        private val soundManager: SoundManager,
+        hapticFeedback: HapticFeedbackManager,
         @Assisted private val playerName: String,
         @Assisted private val queensCount: Int,
     ) : ViewModel() {
@@ -48,7 +52,7 @@ class NQueensGameViewModel
         }
 
         private val nQueensBoardGame = NQueensBoardGame(queensCount)
-        private val boardState = NQueensBoardUiState(nQueensBoardGame)
+        private val boardState = NQueensBoardUiState(nQueensBoardGame, soundManager, hapticFeedback)
 
         private val _uiState =
             MutableStateFlow(
@@ -138,6 +142,7 @@ class NQueensGameViewModel
         override fun onCleared() {
             super.onCleared()
             stopTimer()
+            soundManager.release()
             boardState.resetGame()
         }
     }
