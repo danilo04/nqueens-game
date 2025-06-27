@@ -63,6 +63,13 @@ fun ChessGamesNavHost(
                 playerName = playerName ?: "Player",
                 queensCount = queensCount ?: 8,
                 onNavigateBack = { navController.popBackStack(Screens.MENU.route, false) },
+                onNavigateToLeaderboard = {
+                    navController.navigate(Screens.LEADERBOARDS.route) {
+                        popUpTo(Screens.MENU.route) {
+                            inclusive = false
+                        }
+                    }
+                },
             )
         }
 

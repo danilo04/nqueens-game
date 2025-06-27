@@ -80,6 +80,7 @@ fun NQueensGameScreen(
     playerName: String,
     queensCount: Int,
     onNavigateBack: () -> Unit,
+    onNavigateToLeaderboard: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val viewModel =
@@ -123,7 +124,7 @@ fun NQueensGameScreen(
                 }
             },
             onResetGame = viewModel::resetGame,
-            onNavigateToMainMenu = onNavigateBack,
+            onNavigateToLeaderboard = onNavigateToLeaderboard,
             modifier = modifier.padding(paddingValues),
         )
     }
@@ -134,7 +135,7 @@ fun NQueensGameScreenContent(
     uiState: NQueensGameUiState,
     onPauseToggle: () -> Unit,
     onResetGame: () -> Unit,
-    onNavigateToMainMenu: () -> Unit,
+    onNavigateToLeaderboard: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val configuration = LocalConfiguration.current
@@ -186,7 +187,7 @@ fun NQueensGameScreenContent(
                             isGameCompleted = uiState.isGameCompleted,
                             totalQueens = uiState.totalQueens,
                             onNewGame = onResetGame,
-                            onMainMenu = onNavigateToMainMenu,
+                            onLeaderboard = onNavigateToLeaderboard,
                         )
 
                         Row(
@@ -232,7 +233,7 @@ fun NQueensGameScreenContent(
                         isGameCompleted = uiState.isGameCompleted,
                         totalQueens = uiState.totalQueens,
                         onNewGame = onResetGame,
-                        onMainMenu = onNavigateToMainMenu,
+                        onLeaderboard = onNavigateToLeaderboard,
                     )
                 }
             }
@@ -541,25 +542,26 @@ fun BoardSection(
 private fun GameCompletionDialog(
     totalQueens: Int,
     onNewGame: () -> Unit,
-    onMainMenu: () -> Unit,
+    onLeaderboard: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(dismissOnClickOutside = false),
         confirmButton = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 CGButton(
-                    onClick = onMainMenu,
-                    modifier = Modifier.weight(1f),
+                    onClick = onLeaderboard,
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(stringResource(R.string.main_menu))
+                    Text(stringResource(R.string.view_leaderboards))
                 }
                 CGButton(
                     onClick = onNewGame,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(stringResource(R.string.new_game))
                 }
@@ -614,7 +616,7 @@ fun GameStatusSection(
     isGameCompleted: Boolean,
     totalQueens: Int,
     onNewGame: () -> Unit,
-    onMainMenu: () -> Unit,
+    onLeaderboard: () -> Unit,
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -634,9 +636,9 @@ fun GameStatusSection(
                 showDialog = false
                 onNewGame()
             },
-            onMainMenu = {
+            onLeaderboard = {
                 showDialog = false
-                onMainMenu()
+                onLeaderboard()
             },
             onDismiss = {
                 showDialog = false
@@ -671,7 +673,7 @@ fun NQueensGameScreenPreview() {
             uiState = mockUiState,
             onPauseToggle = { },
             onResetGame = { },
-            onNavigateToMainMenu = { },
+            onNavigateToLeaderboard = { },
         )
     }
 }
@@ -696,7 +698,7 @@ fun NQueensGameScreenPausedPreview() {
         NQueensGameScreenContent(
             uiState = mockUiState,
             onPauseToggle = { },
-            onNavigateToMainMenu = {},
+            onNavigateToLeaderboard = {},
             onResetGame = { },
         )
     }
@@ -723,7 +725,7 @@ fun NQueensGameScreenCompletedPreview() {
             uiState = mockUiState,
             onPauseToggle = { },
             onResetGame = { },
-            onNavigateToMainMenu = {},
+            onNavigateToLeaderboard = { },
         )
     }
 }
@@ -753,7 +755,7 @@ fun NQueensGameScreenLandscapePreview() {
             uiState = mockUiState,
             onPauseToggle = { },
             onResetGame = { },
-            onNavigateToMainMenu = {},
+            onNavigateToLeaderboard = { },
         )
     }
 }
