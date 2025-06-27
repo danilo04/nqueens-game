@@ -22,11 +22,6 @@ class NQueensGamesWonRepository
                 nQueensGamesWonDao.insertGame(game)
             }
 
-        suspend fun getAllGames(): List<NQueensGamesWon> =
-            withContext(ioThreadDispatcher) {
-                nQueensGamesWonDao.getAllGames()
-            }
-
         fun getAllGamesOffsetFlow(page: Int = 0): Flow<List<NQueensGamesWon>> =
             nQueensGamesWonDao
                 .getAllGamesOffsetFlow(offset = PAGE_SIZE * page, limit = PAGE_SIZE)
@@ -42,11 +37,6 @@ class NQueensGamesWonRepository
                     offset = PAGE_SIZE * page,
                     limit = PAGE_SIZE,
                 ).flowOn(ioThreadDispatcher)
-
-        suspend fun getGamesByQueensCount(queensCount: Int): List<NQueensGamesWon> =
-            withContext(ioThreadDispatcher) {
-                nQueensGamesWonDao.getGamesByQueensCount(queensCount)
-            }
 
         fun getDistinctQueensCountsFlow(): Flow<List<Int>> =
             nQueensGamesWonDao.getDistinctQueensCountsFlow().flowOn(ioThreadDispatcher)
