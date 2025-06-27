@@ -1,4 +1,4 @@
-package com.nqueens.game.core.sound
+package com.nqueens.game.core.utils.sound
 
 /**
  * A dummy implementation of sound functionality for testing purposes.

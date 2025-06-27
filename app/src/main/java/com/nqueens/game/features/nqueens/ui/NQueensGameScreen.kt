@@ -62,10 +62,10 @@ import com.nqueens.game.R
 import com.nqueens.game.core.board.ui.components.BoardView
 import com.nqueens.game.core.design.components.CGButton
 import com.nqueens.game.core.design.theme.ChessGamesTheme
-import com.nqueens.game.core.haptic.DummyHapticFeedbackManager
 import com.nqueens.game.core.icons.ChessGamesIcons
 import com.nqueens.game.core.icons.pieces.WhiteQueen
-import com.nqueens.game.core.sound.DummySoundManager
+import com.nqueens.game.core.utils.haptic.DummyHapticFeedbackManager
+import com.nqueens.game.core.utils.sound.DummySoundManager
 import com.nqueens.game.core.utils.ui.rememberAppState
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.ui.state.NQueensBoardUiState

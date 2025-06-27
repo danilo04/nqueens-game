@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.nqueens.game.core.board.domain.games.GameState
 import com.nqueens.game.core.data.database.entities.NQueensGamesWon
 import com.nqueens.game.core.data.repositories.NQueensGamesWonRepository
-import com.nqueens.game.core.haptic.HapticFeedbackManager
-import com.nqueens.game.core.sound.SoundManager
 import com.nqueens.game.core.utils.TimeProvider
+import com.nqueens.game.core.utils.haptic.HapticFeedbackManager
+import com.nqueens.game.core.utils.sound.SoundManager
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.ui.state.NQueensBoardUiState
 import dagger.assisted.Assisted

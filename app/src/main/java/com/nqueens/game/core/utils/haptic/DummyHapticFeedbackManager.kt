@@ -1,4 +1,4 @@
-package com.nqueens.game.core.haptic
+package com.nqueens.game.core.utils.haptic
 
 /**
  * A dummy implementation of haptic feedback functionality for testing purposes.

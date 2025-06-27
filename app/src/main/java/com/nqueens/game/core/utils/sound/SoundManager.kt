@@ -1,4 +1,4 @@
-package com.nqueens.game.core.sound
+package com.nqueens.game.core.utils.sound
 
 import android.content.Context
 import android.media.MediaPlayer

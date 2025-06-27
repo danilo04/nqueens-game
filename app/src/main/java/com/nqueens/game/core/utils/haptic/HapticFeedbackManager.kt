@@ -1,4 +1,4 @@
-package com.nqueens.game.core.haptic
+package com.nqueens.game.core.utils.haptic
 
 import android.content.Context
 import android.os.Build

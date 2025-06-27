@@ -1,4 +1,4 @@
-package com.nqueens.game.core.haptic
+package com.nqueens.game.core.utils.haptic
 
 /**
  * Interface for providing haptic feedback functionality.

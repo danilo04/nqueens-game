@@ -7,8 +7,8 @@ import com.nqueens.game.core.board.domain.pieces.PieceColor
 import com.nqueens.game.core.board.domain.pieces.QueenPiece
 import com.nqueens.game.core.board.ui.state.BoardUiState
 import com.nqueens.game.core.board.ui.state.SelectedState
-import com.nqueens.game.core.haptic.HapticFeedbackInterface
-import com.nqueens.game.core.sound.SoundManagerInterface
+import com.nqueens.game.core.utils.haptic.HapticFeedbackInterface
+import com.nqueens.game.core.utils.sound.SoundManagerInterface
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.domain.containsBoardPosition
 
