@@ -3,6 +3,9 @@ package com.nqueens.game.features.nqueens.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nqueens.game.core.board.domain.games.GameState
+import com.nqueens.game.core.data.database.entities.NQueensGamesWon
+import com.nqueens.game.core.data.repositories.NQueensGamesWonRepository
+import com.nqueens.game.core.utils.TimeProvider
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import com.nqueens.game.features.nqueens.ui.state.NQueensBoardUiState
 import dagger.assisted.Assisted
@@ -31,6 +34,8 @@ data class NQueensGameUiState(
 class NQueensGameViewModel
     @AssistedInject
     constructor(
+        private val nQueensGamesWonRepository: NQueensGamesWonRepository,
+        private val timeProvider: TimeProvider,
         @Assisted private val playerName: String,
         @Assisted private val queensCount: Int,
     ) : ViewModel() {
@@ -70,6 +75,10 @@ class NQueensGameViewModel
                                 isGameCompleted = gameState == GameState.SOLVED,
                                 queensPlaced = queensPlaced,
                             )
+
+                        if (gameState == GameState.SOLVED) {
+                            storeGameWon()
+                        }
                     }.collect {}
             }
         }
@@ -95,6 +104,17 @@ class NQueensGameViewModel
                     isGamePaused = false,
                 )
             startTimer()
+        }
+
+        private suspend fun storeGameWon() {
+            nQueensGamesWonRepository.insert(
+                NQueensGamesWon(
+                    playerName = playerName,
+                    queensCount = queensCount,
+                    timeInSeconds = _uiState.value.timeElapsed,
+                    datePlayed = timeProvider.currentUTCEpoch(),
+                ),
+            )
         }
 
         private fun startTimer() {
