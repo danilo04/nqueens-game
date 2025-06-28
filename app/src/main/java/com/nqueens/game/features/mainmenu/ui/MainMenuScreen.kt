@@ -74,7 +74,7 @@ fun MainMenuScreen(onAction: (MainMenuAction) -> Unit) {
                 onClick = { onAction(MainMenuAction.OpenLeaderboards) },
             ) {
                 Text(
-                    text = stringResource(id = R.string.main_menu_leaderboards),
+                    text = stringResource(id = R.string.leaderboards_title),
                     fontSize = 18.sp,
                 )
             }

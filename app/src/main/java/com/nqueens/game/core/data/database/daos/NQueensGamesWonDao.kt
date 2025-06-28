@@ -16,7 +16,8 @@ interface NQueensGamesWonDao {
     fun getAllGames(): List<NQueensGamesWon>
 
     @Query(
-        "SELECT * FROM ${NQueensGamesWon.TABLE_NAME} ORDER BY ${NQueensGamesWon.COLUMN_DATE} DESC LIMIT :limit OFFSET :offset",
+        "SELECT * FROM ${NQueensGamesWon.TABLE_NAME} ORDER BY ${NQueensGamesWon.COLUMN_TIME_IN_SECONDS} ASC, ${
+            NQueensGamesWon.COLUMN_DATE} DESC LIMIT :limit OFFSET :offset",
     )
     fun getAllGamesOffsetFlow(
         offset: Int,
@@ -39,12 +40,14 @@ interface NQueensGamesWonDao {
     fun getDistinctQueensCounts(): List<Int>
 
     @Query(
-        "SELECT * FROM ${NQueensGamesWon.TABLE_NAME} WHERE ${NQueensGamesWon.COLUMN_QUEENS_COUNT} = :queensCount ORDER BY ${NQueensGamesWon.COLUMN_DATE} DESC",
+        "SELECT * FROM ${NQueensGamesWon.TABLE_NAME} WHERE ${NQueensGamesWon.COLUMN_QUEENS_COUNT} = :queensCount " +
+            "ORDER BY ${NQueensGamesWon.COLUMN_TIME_IN_SECONDS} ASC, ${NQueensGamesWon.COLUMN_DATE} DESC",
     )
     fun getGamesByQueensCount(queensCount: Int): List<NQueensGamesWon>
 
     @Query(
-        "SELECT * FROM ${NQueensGamesWon.TABLE_NAME} WHERE ${NQueensGamesWon.COLUMN_QUEENS_COUNT} = :queensCount ORDER BY ${NQueensGamesWon.COLUMN_DATE} DESC LIMIT :limit OFFSET :offset",
+        "SELECT * FROM ${NQueensGamesWon.TABLE_NAME} WHERE ${NQueensGamesWon.COLUMN_QUEENS_COUNT} = :queensCount " +
+            "ORDER BY ${NQueensGamesWon.COLUMN_DATE} DESC LIMIT :limit OFFSET :offset",
     )
     fun getGamesOffsetByQueensCountFlow(
         queensCount: Int,

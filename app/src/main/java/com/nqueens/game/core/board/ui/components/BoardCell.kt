@@ -15,12 +15,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nqueens.game.R
 import com.nqueens.game.core.board.domain.Spot
@@ -88,6 +90,44 @@ fun RowScope.BoardCell(
                             .align(Alignment.TopEnd)
                             .size(24.dp)
                             .padding(4.dp),
+                )
+            }
+        }
+
+        if (col == 0 || row == 0) {
+            val coordinateColor =
+                when {
+                    cellState.hasErrorColor -> MaterialTheme.colorScheme.onError.copy(alpha = 0.9f)
+                    isDarkSquare -> MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
+                    else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
+                }
+            if (col == 0) {
+                Text(
+                    text = (row + 1).toString(),
+                    style =
+                        MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                        ),
+                    color = coordinateColor,
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(2.dp),
+                )
+            }
+
+            if (row == 0) {
+                Text(
+                    text = ('a' + col).toString(),
+                    style =
+                        MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                        ),
+                    color = coordinateColor,
+                    modifier =
+                        Modifier
+                            .align(Alignment.TopStart)
+                            .padding(2.dp),
                 )
             }
         }

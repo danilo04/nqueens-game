@@ -8,6 +8,8 @@ import com.nqueens.game.core.board.domain.games.GameState
 import com.nqueens.game.core.board.domain.pieces.PieceColor
 import com.nqueens.game.core.board.domain.pieces.QueenPiece
 import com.nqueens.game.core.board.ui.state.SelectedState
+import com.nqueens.game.core.utils.haptic.DummyHapticFeedbackManager
+import com.nqueens.game.core.utils.sound.DummySoundManager
 import com.nqueens.game.features.nqueens.domain.NQueensBoardGame
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -22,7 +24,7 @@ class NQueensBoardUiStateTest {
     fun setUp() {
         realGame = NQueensBoardGame(4)
         realGame.initialize()
-        uiState = NQueensBoardUiState(realGame)
+        uiState = NQueensBoardUiState(realGame, DummySoundManager(), DummyHapticFeedbackManager())
     }
 
     @Test

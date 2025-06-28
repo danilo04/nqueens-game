@@ -77,10 +77,10 @@ class StartNQueensGameViewModel
             )
         }
 
-        private fun validateQueensNumber(number: Int?): Boolean = number != null && number in 4..12
+        private fun validateQueensNumber(number: Int?): Boolean = number != null && number in MIN_QUEENS..MAX_QUEENS
 
         companion object {
             const val MIN_QUEENS = 4
-            const val MAX_QUEENS = 11
+            const val MAX_QUEENS = 15
         }
     }
