@@ -17,7 +17,7 @@ This mobile game implementation allows players to:
 
 Here is a demonstration video:
 
-https://github.com/user-attachments/assets/demo.mp4
+![Demo Video](videos/demo.mp4)
 
 
 
