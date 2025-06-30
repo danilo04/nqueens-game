@@ -181,6 +181,7 @@ private fun LeaderboardsContent(
                 // Games list
                 val lazyListState = rememberLazyListState()
                 LazyColumn(
+                    state = lazyListState,
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
@@ -191,7 +192,7 @@ private fun LeaderboardsContent(
                     }
                 }
 
-                lazyListState.OnBottomReached(10) {
+                lazyListState.OnBottomReached(4) {
                     uiState.loadMore.invoke()
                 }
             }

@@ -19,6 +19,7 @@ fun ChessGamesNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = Screens.MENU.route,
+    onExit: () -> Unit = {},
 ) {
     NavHost(
         modifier = modifier,
@@ -35,7 +36,7 @@ fun ChessGamesNavHost(
                         navController.navigate(Screens.LEADERBOARDS.route)
                     }
                     MainMenuAction.Exit -> {
-                        // Handle exit if needed
+                        onExit()
                     }
                 }
             }
