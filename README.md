@@ -10,7 +10,7 @@ The N-Queens puzzle is a classic computer science problem where the challenge is
 - On the same diagonal
 
 This mobile game implementation allows players to:
-- Choose board sizes from 4×4 to 12×12
+- Choose board sizes from 4×4
 - Interactively place and remove queens
 - Get visual feedback for invalid placements
 - Track their solving progress and times
