@@ -23,7 +23,7 @@ Here is a demonstration video:
 
 ## ✨ Features
 
-- **Multiple Board Sizes**: Play on boards from 4×4 up to 12×12
+- **Multiple Board Sizes**: Play on boards from 4×4
 - **Interactive Gameplay**: Tap to place/remove queens with intuitive controls
 - **Visual Feedback**: Real-time validation with error highlighting
 - **Modern UI**: Beautiful Material Design 3 interface with dynamic theming
