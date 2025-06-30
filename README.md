@@ -17,8 +17,8 @@ This mobile game implementation allows players to:
 
 Here is a demonstration video:
 
-![Demo Video](videos/demo.mp4)
-
+[Youtube](https://www.youtube.com/watch?v=UQrcCZBahHc) | 
+[Video File](https://github.com/danilo04/nqueens-game/blob/main/videos/demo.mp4)
 
 
 ## ✨ Features
