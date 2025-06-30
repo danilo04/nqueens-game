@@ -1,5 +1,6 @@
 package com.nqueens.game
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -8,6 +9,8 @@ import com.nqueens.game.core.design.theme.ChessGamesTheme
 
 @Composable
 fun ChessGamesApp() {
+    val activity = LocalActivity.current
+
     ChessGamesTheme {
 //        val navController = rememberNavController()
         // val navigator = NavControllerNavigator(navController)
@@ -18,7 +21,11 @@ fun ChessGamesApp() {
                 Modifier
                     .fillMaxSize(),
         ) {
-            ChessGamesNavHost()
+            ChessGamesNavHost(
+                onExit = {
+                    activity?.finish()
+                },
+            )
         }
     }
 }
