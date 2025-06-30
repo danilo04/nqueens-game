@@ -47,7 +47,7 @@ interface NQueensGamesWonDao {
 
     @Query(
         "SELECT * FROM ${NQueensGamesWon.TABLE_NAME} WHERE ${NQueensGamesWon.COLUMN_QUEENS_COUNT} = :queensCount " +
-            "ORDER BY ${NQueensGamesWon.COLUMN_DATE} DESC LIMIT :limit OFFSET :offset",
+            "ORDER BY ${NQueensGamesWon.COLUMN_TIME_IN_SECONDS} ASC, ${NQueensGamesWon.COLUMN_DATE} DESC LIMIT :limit OFFSET :offset",
     )
     fun getGamesOffsetByQueensCountFlow(
         queensCount: Int,
