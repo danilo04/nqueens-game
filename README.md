@@ -15,6 +15,12 @@ This mobile game implementation allows players to:
 - Get visual feedback for invalid placements
 - Track their solving progress and times
 
+Here is a demonstration video:
+
+https://github.com/user-attachments/assets/demo.mp4
+
+
+
 ## ✨ Features
 
 - **Multiple Board Sizes**: Play on boards from 4×4 up to 12×12
