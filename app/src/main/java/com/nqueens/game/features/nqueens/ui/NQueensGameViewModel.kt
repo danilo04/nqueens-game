@@ -1,5 +1,6 @@
 package com.nqueens.game.features.nqueens.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nqueens.game.core.board.domain.games.GameState
@@ -134,7 +135,8 @@ class NQueensGameViewModel
                 }
         }
 
-        private fun stopTimer() {
+        @VisibleForTesting
+        fun stopTimer() {
             timerJob?.cancel()
             timerJob = null
         }
